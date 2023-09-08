@@ -1,24 +1,32 @@
 pipeline {
     agent any
+    environment {
+        REPO_URL          = 'https://github.com/huynhminhchu/catalog-service.git'
+    }
     stages {
         stage('Checkout'){
             steps {
-                checkout scm
-                sh 'ls -la'
+                dir("polar-bookshop") {
+                    git(
+                        url: "https://github.com/huynhminhchu/catalog-service.git",
+                        branch: "master",
+                        changelog: true,
+                        poll: true
+                    )
+                }
             }
         }
 
-
         stage('Build') {
             steps {
-                sh 'mvn -f hello-app/pom.xml -B -DskipTests clean package'
+                sh 'ls -la'
             }
-            post {
-                success {
-                    echo "Now Archiving the Artifacts....."
-                    archiveArtifacts artifacts: '**/*.jar'
-                }
-            }
+            // post {
+            //     success {
+            //         echo "Now Archiving the Artifacts....."
+            //         archiveArtifacts artifacts: '**/*.jar'
+            //     }
+            // }
         }
         stage('Test') {
             steps {
