@@ -17,7 +17,7 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Test') {
             steps {
                 sh 'ls -la'
             }
@@ -28,13 +28,27 @@ pipeline {
             //     }
             // }
         }
-        stage('Test') {
+        stage('Security Check') {
             steps {
-                sh 'mvn -f hello-app/pom.xml test'
+                sh 'echo "Security check"'
             }
-            post {
-                always {
-                    junit 'hello-app/target/surefire-reports/*.xml'
+            // post {
+            //     success {
+            //         echo "Now Archiving the Artifacts....."
+            //         archiveArtifacts artifacts: '**/*.jar'
+            //     }
+            // }
+        }
+        stage('Build') {
+            steps {
+                dir("polar-bookshop/catalog-service") {
+                    steps {
+                        env.GIT_COMMIT=sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
+                        sh """
+                            mvn -B -DskipTests clean package
+                            docker build -t catalog-service:${env.GIT_COMMIT} .
+                        """
+                    }
                 }
             }
         }
