@@ -7,7 +7,7 @@ pipeline {
         stage('Checkout'){
             steps {
                 dir("polar-bookshop") {
-                    git branch: master, url: env.REPO_URL
+                    git branch: "master", url: env.REPO_URL
                 }
             }
         }
