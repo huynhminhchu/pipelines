@@ -43,13 +43,14 @@ pipeline {
             steps {
                 script {
                     dir("polar-bookshop/catalog-service") {
-                        env.COMMIT = sh (script: 'git rev-parse HEAD',returnStdout: true).trim()
+                        def commitHash = sh(script: 'git rev-parse --short HEAD', returnStdout: true)
+                        env.IMAGE_TAG = sh(returnStdout: true, script: commitHash).trim()
                         // sh """
                         //     mvn -B -DskipTests clean package
                         //     docker build -t catalog-service:${env.GIT_COMMIT} .
                         // """
                         sh 'ls -la'
-                        sh 'echo ${env.COMMIT}'
+                        sh """echo ${env.COMMIT}"""
                     }
                 }
             }
