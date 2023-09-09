@@ -46,14 +46,15 @@ pipeline {
 
                         env.GIT_COMMIT=sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
                         sh 'env | sort'
-                        sh """#!/bin/bash
-                            mvn -B -DskipTests clean package
-                            docker build -t catalog-service:${env.GIT_COMMIT} .
-                        """
-
-                        // sh """#!/bin/bash
-                        // echo ${env.COMMIT}
+                        // sh """
+                        //     mvn -B -DskipTests clean package
+                        //     docker build -t catalog-service:${env.GIT_COMMIT} .
                         // """
+
+                        sh """#!/bin/bash
+                        echo ${env.COMMIT}
+                        mvn -B -DskipTests clean package
+                        """
                     }
                 }
             }
