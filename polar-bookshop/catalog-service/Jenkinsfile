@@ -49,8 +49,10 @@ pipeline {
                         //     mvn -B -DskipTests clean package
                         //     docker build -t catalog-service:${env.GIT_COMMIT} .
                         // """
-                        sh 'ls -la'
-                        sh """echo ${env.COMMIT}"""
+                        sh 'echo "wtf"'
+                        sh """#!/bin/bash
+                        echo ${env.COMMIT}
+                        """
                     }
                 }
             }
