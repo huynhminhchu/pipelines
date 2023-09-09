@@ -52,7 +52,10 @@ pipeline {
                         // """
 
                         sh """#!/bin/bash
-                        echo ${env.COMMIT}
+                        echo ${env.GIT_COMMIT}
+                        echo "Current working directory"
+                        ls -la
+                        pwd
                         mvn -B -DskipTests clean package
                         """
                     }
