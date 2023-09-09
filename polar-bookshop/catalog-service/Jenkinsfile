@@ -43,8 +43,7 @@ pipeline {
             steps {
                 script {
                     dir("polar-bookshop/catalog-service") {
-                        echo 'whoami'
-                        sh "echo $BASH"
+                        sh 'whoami'
                         env.DRUID_GIT_COMMIT=sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
                         sh 'env | sort'
                         // sh """
