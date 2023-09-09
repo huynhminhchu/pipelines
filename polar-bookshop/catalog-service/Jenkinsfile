@@ -51,7 +51,6 @@ pipeline {
                     ls -la
                     pwd
                     mvn -B -DskipTests clean package
-                    docker build -t catalog-service:${env.GIT_COMMIT} .
                     """
                     
                 }
