@@ -41,15 +41,14 @@ pipeline {
         }
         stage('Build') {
             steps {
-                dir("polar-bookshop/catalog-service") {
-                    steps {
-                        script {
-                            env.GIT_COMMIT=sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
-                            sh """
-                                mvn -B -DskipTests clean package
-                                docker build -t catalog-service:${env.GIT_COMMIT} .
-                            """
-                        }
+                script {
+                    dir("polar-bookshop/catalog-service") {
+                        // env.GIT_COMMIT=sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
+                        // sh """
+                        //     mvn -B -DskipTests clean package
+                        //     docker build -t catalog-service:${env.GIT_COMMIT} .
+                        // """
+                        sh 'ls -la'
                     }
                 }
             }
