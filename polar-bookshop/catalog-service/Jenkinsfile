@@ -50,7 +50,8 @@ pipeline {
                     echo "Current working directory"
                     ls -la
                     pwd
-                    mvn -B -DskipTests clean package
+                    /opt/maven/bin/mvn -B -DskipTests clean package
+                    docker build -t catalog-service:${env.GIT_COMMIT} .
                     """
                     
                 }
