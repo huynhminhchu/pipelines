@@ -6,9 +6,8 @@ pipeline {
     stages {
         stage('Checkout'){
             steps {
-                dir("polar-bookshop") {
-                    git branch: "master", url: env.REPO_URL
-                }
+                git branch: "master", url: env.REPO_URL
+
             }
         }
 
@@ -25,9 +24,7 @@ pipeline {
         }
         stage('Security Check') {
             steps {
-                dir("polar-bookshop") {
-                    sh 'ls -la'
-                }
+                sh 'ls -la'
             }
             // post {
             //     success {
@@ -39,23 +36,23 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    dir("polar-bookshop/catalog-service") {
 
-                        env.GIT_COMMIT=sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
-                        sh 'env | sort'
-                        // sh """
-                        //     mvn -B -DskipTests clean package
-                        //     docker build -t catalog-service:${env.GIT_COMMIT} .
-                        // """
 
-                        sh """#!/bin/bash
-                        echo ${env.GIT_COMMIT}
-                        echo "Current working directory"
-                        ls -la
-                        pwd
-                        mvn -B -DskipTests clean package
-                        """
-                    }
+                    env.GIT_COMMIT=sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
+                    sh 'env | sort'
+                    // sh """
+                    //     mvn -B -DskipTests clean package
+                    //     docker build -t catalog-service:${env.GIT_COMMIT} .
+                    // """
+
+                    sh """#!/bin/bash
+                    echo ${env.GIT_COMMIT}
+                    echo "Current working directory"
+                    ls -la
+                    pwd
+                    mvn -B -DskipTests clean package
+                    """
+                    
                 }
             }
         }
