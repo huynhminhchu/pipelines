@@ -2,6 +2,7 @@ pipeline {
     agent any
     environment {
         REPO_URL          = 'https://github.com/huynhminhchu/catalog-service.git'
+        HARBOR_CREDENTIAL = credentials('harbor-credential')
     }
     stages {
         stage('Checkout'){
@@ -33,7 +34,7 @@ pipeline {
             //     }
             // }
         }
-        stage('Build') {
+        stage('Build & Push') {
             steps {
                 script {
 
@@ -50,8 +51,11 @@ pipeline {
                     echo "Current working directory"
                     ls -la
                     pwd
+                    echo "Harbor user: $HARBOR_CREDENTIAL_USR"
                     /opt/maven/bin/mvn -B -DskipTests clean package
-                    docker build -t catalog-service:${env.GIT_COMMIT} .
+                    docker build -t harbor.chuhuynh.local/polarbookshop/catalog-service:${env.GIT_COMMIT} .
+                    docker tag harbor.chuhuynh.local/polarbookshop/catalog-service:${env.GIT_COMMIT} harbor.chuhuynh.local/polarbookshop/catalog-service:latest
+                    echo $HARBOR_CREDENTIAL_PSW | docker login harbor.chuhuynh.local:443 -u '$HARBOR_CREDENTIAL_USR' --password-stdin
                     """
                     
                 }
